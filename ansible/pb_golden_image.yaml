@@ -1,0 +1,61 @@
+- name: Build Golden Image
+  hosts: container_templates
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Building of golden image is starting
+    - name: Run apt-get update
+      ansible.builtin.apt:
+        update_cache: true
+    - name: Run apt-get upgrade
+      ansible.builtin.apt:
+        upgrade: true
+    - name: Install git, vim
+      ansible.builtin.apt:
+        name:
+          - git
+          - vim
+    - name: Apt clean
+      ansible.builtin.apt:
+        clean: true
+    - name: Apt autoremove
+      ansible.builtin.apt:
+        autoremove: true
+    - name: Clean SSH hosts
+      ansible.builtin.file:
+        state: absent
+        path: /etc/ssh/ssh_host_dsa_key
+    - name: Clean SSH hosts
+      ansible.builtin.file:
+        state: absent
+        path: /etc/ssh/ssh_host_dsa_key.pub
+    - name: Clean SSH hosts
+      ansible.builtin.file:
+        state: absent
+        path: /etc/ssh/ssh_host_ecdsa_key
+    - name: Clean SSH hosts
+      ansible.builtin.file:
+        state: absent
+        path: /etc/ssh/ssh_host_ecdsa_key.pub
+    - name: Clean SSH hosts
+      ansible.builtin.file:
+        state: absent
+        path: /etc/ssh/ssh_host_ed25519_key
+    - name: Clean SSH hosts
+      ansible.builtin.file:
+        state: absent
+        path: /etc/ssh/ssh_host_ed25519_key.pub
+    - name: Clear machine id
+      ansible.builtin.command: truncate -s 0 /etc/machine-id
+    - name: Poweroff
+      ansible.builtin.command: poweroff
+      ignore_errors: true
+    - name: Wait for a few seconds to ensure LXC container is off
+      ansible.builtin.wait_for:
+        timeout: 10
+      delegate_to: localhost
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Building of golden image is completed
