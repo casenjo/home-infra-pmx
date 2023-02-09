@@ -31,6 +31,20 @@
         - docker-ce-cli
         - containerd.io
         - docker-compose-plugin
+    - name: Create docker user group
+      ansible.builtin.group:
+        name: docker
+        state: present
+    - name: Add app user to run the Docker container
+      ansible.builtin.user:
+        name: app
+        groups: docker
+        append: true
+    - name: Set authorized key taken from file
+      ansible.posix.authorized_key:
+        user: app
+        state: present
+        key: "{{ lookup('file', '~/.ssh/app.pub') }}"
     - name: Make sure Docker is started
       ansible.builtin.service:
         name: docker
