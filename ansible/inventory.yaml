@@ -1,6 +1,7 @@
 container_templates:
   hosts:
     golden_image:
+      ansible_host:
   vars:
     ansible_user: root
     ansible_ssh_private_key_file: ~/.ssh/ansible
@@ -8,6 +9,7 @@ container_templates:
 container_docker_hosts:
   hosts:
     pihole_test:
+      ansible_host:
   vars:
     ansible_user: root
     ansible_ssh_private_key_file: ~/.ssh/ansible
