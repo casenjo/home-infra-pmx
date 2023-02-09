@@ -56,6 +56,10 @@ resource "proxmox_lxc" "base-template-ubuntu-22-04" {
   startup       = "order=1"
   cpulimit      = 0
 
+  features {
+    nesting = true
+  }
+
   ssh_public_keys = var.ssh_public_key
 
   # template = true
